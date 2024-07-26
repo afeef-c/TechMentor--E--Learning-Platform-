@@ -1,0 +1,28 @@
+media/
+profile_pics/
+.env/
+
+# Python specific
+*.pyc
+__pycache__/
+
+# Django specific
+*.log
+*.sqlite3
+db.sqlite3
+staticfiles/
+
+# Environment files
+.env
+
+# Node modules (if applicable)
+node_modules/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.swp
