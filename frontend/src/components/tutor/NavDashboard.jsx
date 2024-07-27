@@ -1,8 +1,21 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux';
 import { NavLink,Link ,useNavigate } from 'react-router-dom';
+import {fetchUserDetails} from '../../authSlice';
 
 
 function NavDashboard() {
+    const dispatch = useDispatch()
+    const authTokens = useSelector((state)=> state.auth.authTokens)
+    useEffect(()=>{
+        dispatch(fetchUserDetails())
+
+    },[authTokens, dispatch])
+
+    const user = useSelector((state)=> state.auth.user)
+
+    const isTutor = user.user_type==='tutor'? true:false
+
   return (
     <>
 
@@ -31,12 +44,28 @@ function NavDashboard() {
                         <NavLink to="/dashboard/edit_profile/" className="nav-item nav-link" >
                             <i className="fas fa-edit"></i> Edit Details
                         </NavLink>
+                        {isTutor ? 
+                            (
+                            <>
+                            <NavLink to="/dashboard/my_courses/" className="nav-item nav-link" >
+                                <i className="fas fa-edit"></i> My Courses
+                            </NavLink>
+                            <NavLink to="/dashboard/add_experience/" className="nav-item nav-link" >
+                                <i className="fas fa-edit"></i> Experiences and Expertice
+                            </NavLink>
+                            
+                            </>
+                            )
+                            :
+                            (<NavLink to="/dashboard/edit_profile/" className="nav-item nav-link" >
+                                <i className="fas fa-edit"></i> Assignments
+                            </NavLink>)
+                        }
+                        
                         <NavLink to="courses/" className="nav-item nav-link" >
                             <i className="fas fa-envelope"></i> Messages
                         </NavLink>
-                        <NavLink to="/tutors" className="nav-item nav-link" >
-                            <i className="fas fa-book"></i> Courses
-                        </NavLink>
+                        
                         <NavLink to="contact" className="nav-item nav-link" >
                             <i className="fas fa-phone"></i> Contact
                         </NavLink>

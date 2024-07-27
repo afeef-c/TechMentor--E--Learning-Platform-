@@ -28,6 +28,11 @@ import StudentDashboard from './pages/dashboards/StudentDashboard';
 import UserIntro from './pages/dashboards/UserIntro';
 import EditProfile from './components/tutor/EditProfile';
 import DashBoardRoute from './components/DashBoardRoute';
+import AddExperience from './components/tutor/AddExperience';
+import CreateCourseTutor from './components/tutor/AddCourse';
+import AddCategory from './components/tutor/AddCategory';
+import AddCourse from './components/tutor/AddCourse';
+import MyCourses from './components/tutor/MyCourses';
 
 function App() {
   const isAdminDashboard = window.location.pathname.includes('admin_dashboard');
@@ -52,6 +57,10 @@ function App() {
           <Route path='/dashboard/*' element={<DashBoardRoute><TutorDashboard /></DashBoardRoute>}>
             <Route path='bio' element={<UserIntro />} />
             <Route path='edit_profile' element={<EditProfile />} />
+            <Route path='add_experience' element={<AddExperience />} />
+            <Route path='my_courses' element={<MyCourses />} />
+            <Route path='add_category' element={<AddCategory />} />
+            <Route path='add_course' element={<AddCourse />} />
             
           </Route>
           {/*<Route path='/student_dashboard/*' element={<DashBoardRoute><StudentDashboard /></DashBoardRoute>} >

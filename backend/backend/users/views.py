@@ -38,13 +38,19 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
         obj = generics.get_object_or_404(CustomUser, pk=self.kwargs['pk'])
         return obj
     
+
+
+
 class TutorProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = TutorProfile.objects.all()
     serializer_class = TutorProfileSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdminOrTutor]
 
     def get_object(self):
-        return TutorProfile.objects.get(user=self.request.user)
+        try:
+            return TutorProfile.objects.get(user=self.request.user)
+        except TutorProfile.DoesNotExist:
+            raise ValidationError('Tutor profile does not exist for this user.')
 
     def perform_update(self, serializer):
         if self.request.user.user_type != 'tutor':

@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class CustomUser(AbstractUser):
     USER_TYPES = (
@@ -34,3 +35,9 @@ class TutorProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.expertise}"
+
+
+@receiver(post_save, sender=CustomUser)
+def create_or_update_tutor_profile(sender, instance, created, **kwargs):
+    if instance.user_type == 'tutor':
+        TutorProfile.objects.get_or_create(user=instance)
