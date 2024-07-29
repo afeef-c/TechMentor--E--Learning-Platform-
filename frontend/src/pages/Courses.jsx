@@ -1,8 +1,32 @@
-import React from 'react'
-import CourseCategories from '../components/CourseCategories'
-import CourseList from '../components/CourseList'
+import React, { useEffect, useState } from 'react';
+import CourseCategories from '../components/CourseCategories';
+import CourseList from '../components/CourseList';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchUserDetails } from '../authSlice';
+import api from '../api';
 
 function Courses() {
+    const dispatch = useDispatch();
+    const authTokens = useSelector((state) => state.auth.authTokens);
+    const user = useSelector(state => state.auth.user);
+    const navigate = useNavigate();
+
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        if (authTokens) {
+            dispatch(fetchUserDetails());
+        }
+    }, [authTokens,fetchUserDetails]);
+
+    useEffect(() => {
+        if (authTokens) {
+            dispatch(fetchUserDetails());
+        }
+    }, [authTokens, dispatch]);
+
+
   return (
     <div>
         <div className="container-fluid page-header" style={{marginBottom: 90}}>

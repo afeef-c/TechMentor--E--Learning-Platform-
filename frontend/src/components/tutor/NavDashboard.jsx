@@ -57,9 +57,16 @@ function NavDashboard() {
                             </>
                             )
                             :
-                            (<NavLink to="/dashboard/edit_profile/" className="nav-item nav-link" >
-                                <i className="fas fa-edit"></i> Assignments
-                            </NavLink>)
+                            (
+                            <>
+                                <NavLink to="/dashboard/assignments/" className="nav-item nav-link" >
+                                    <i className="fas fa-file-alt"></i> Assignments
+                                </NavLink>
+                                <NavLink to="/dashboard/my_courses/" className="nav-item nav-link" >
+                                    <i className="fas fa-book"></i> My Courses
+                                </NavLink>
+                            </>
+                            )
                         }
                         
                         <NavLink to="courses/" className="nav-item nav-link" >
