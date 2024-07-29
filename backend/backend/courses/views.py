@@ -28,7 +28,7 @@ class CourseListCreateView(generics.ListCreateAPIView):
 class CourseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [IsAdminOrTutor]
+    permission_classes = [permissions.IsAuthenticated,IsAdminOrTutor]
 
 
 
@@ -58,10 +58,18 @@ class CourseActivateView(generics.UpdateAPIView):
 
 # Lesson Views
 class LessonListCreateView(generics.ListCreateAPIView):
-    queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [permissions.IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser] # Handle file uploads
+    parser_classes = [MultiPartParser, FormParser]  # Handle file uploads
+
+    def get_queryset(self):
+        course_id = self.kwargs['course_id']
+        return Lesson.objects.filter(course_id=course_id)
+
+    def perform_create(self, serializer):
+        course_id = self.kwargs['course_id']
+        serializer.save(course_id=course_id)
+
 
 class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()

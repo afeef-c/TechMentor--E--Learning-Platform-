@@ -28,6 +28,10 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
     order = models.IntegerField()
     files = models.FileField(upload_to='lesson_files/', blank=True, null=True)
+    video_url = models.URLField(max_length=200, blank=True, null=True)  # New field for video links
+    document_url = models.URLField(max_length=200, blank=True, null=True)  # New field for video links
+
+
 
     def __str__(self):
         return f"{self.title} - {self.course.title} (Order: {self.order})"

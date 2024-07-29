@@ -28,7 +28,7 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 
-class UserDetailView(generics.RetrieveUpdateAPIView):
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [IsAdminOrSelf]
@@ -37,7 +37,6 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
         # Retrieve the object based on the URL pk
         obj = generics.get_object_or_404(CustomUser, pk=self.kwargs['pk'])
         return obj
-    
 
 
 

@@ -17,12 +17,9 @@ import { AuthProvider } from './context/AuthContext';
 import AdminDashboard from './pages/dashboards/AdminDashboard';
 import PublicRoute from './components/PublicRoute';
 import AdminRoute from './components/AdminRoute';
-import TutorsList from './components/TutorsList';
-import StudentsList from './components/StudentsList';
 import EditUser from './components/admin/EditUser';
 import CreateCourse from './components/CreateCourse';
 import CoursesList from './components/CoursesList';
-import EditCourse from './components/EditCourse';
 import TutorDashboard from './pages/dashboards/TutorDashboard';
 import StudentDashboard from './pages/dashboards/StudentDashboard';
 import UserIntro from './pages/dashboards/UserIntro';
@@ -33,6 +30,12 @@ import CreateCourseTutor from './components/tutor/AddCourse';
 import AddCategory from './components/tutor/AddCategory';
 import AddCourse from './components/tutor/AddCourse';
 import MyCourses from './components/tutor/MyCourses';
+import AddLessons from './components/tutor/AddLessons';
+import Lessons from './components/tutor/Lessons';
+import UpdateLesson from './components/tutor/UpdateLesson';
+import StudentsList from './components/admin/StudentsList';
+import TutorsList from './components/admin/TutorsList';
+import EditCourse from './components/admin/EditCourse';
 
 function App() {
   const isAdminDashboard = window.location.pathname.includes('admin_dashboard');
@@ -59,8 +62,12 @@ function App() {
             <Route path='edit_profile' element={<EditProfile />} />
             <Route path='add_experience' element={<AddExperience />} />
             <Route path='my_courses' element={<MyCourses />} />
+        
             <Route path='add_category' element={<AddCategory />} />
             <Route path='add_course' element={<AddCourse />} />
+            <Route path='add_lessons/:course_id' element={<AddLessons />} />
+            <Route path='lessons/:course_id' element={<Lessons />} />
+            <Route path='update_lessons/:course_id/:lesson_id' element={<UpdateLesson />} />
             
           </Route>
           {/*<Route path='/student_dashboard/*' element={<DashBoardRoute><StudentDashboard /></DashBoardRoute>} >

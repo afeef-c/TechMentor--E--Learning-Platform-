@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../authSlice'; // Adjust the import path as needed
+import { fetchUserDetails, loginUser } from '../authSlice'; // Adjust the import path as needed
 import { Link } from 'react-router-dom';
 
 function Login() {
@@ -11,22 +11,25 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
+    dispatch(fetchUserDetails())
+
     if (user) {
-      if (user.user_type === "admin") {
-        navigate("/admin_dashboard");
+      if (user.user_type === "admin" || user.user_type === "tutor") {
+        navigate("/dashboard");
       } else {
         navigate("/");
       }
     }
   }, [user, navigate]);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       await dispatch(loginUser({ username, password })).unwrap();
+      
     } catch (error) {
       alert('Login failed');
     } finally {

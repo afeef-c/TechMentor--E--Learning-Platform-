@@ -21,7 +21,7 @@ const Navbar = () => {
     if (user) {
       switch (user.user_type) {
         case 'admin':
-          return '/admin_dashboard';
+          return '/admin_dashboard/';
         case 'tutor':
           return '/dashboard/bio/';
         default:
@@ -87,9 +87,9 @@ const Navbar = () => {
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
                     <div className="dropdown-title">Logged in 5 min ago</div>
-                    <Link to={getDashboardLink()} className="dropdown-item has-icon">
+                    <a href={getDashboardLink()} className="dropdown-item has-icon">
                       <i className="far fa-user" /> Profile
-                    </Link>
+                    </a>
                     
                     <a href="features-activities.html" className="dropdown-item has-icon">
                       <i className="fas fa-bolt" /> Activities
@@ -100,9 +100,9 @@ const Navbar = () => {
                     
                     <div className="dropdown-divider" />
                     
-                    <a onClick={handleLogout} className="dropdown-item has-icon text-danger">
+                    <button onClick={handleLogout} className="dropdown-item text-danger">
                       <i className="fas fa-sign-out-alt" /> Logout
-                    </a>
+                    </button>
                   </div>
                 </div>
                 //<button onClick={handleLogout}  className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block">

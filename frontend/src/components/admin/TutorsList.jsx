@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, {useContext, useEffect, useState} from 'react'
-import api from '../api';
-import {ACCESS_TOKEN} from '../constants';
+import api from '../../api';
+import {ACCESS_TOKEN} from '../../constants';
 import {useDispatch,useSelector} from 'react-redux'
 import {NavLink} from 'react-router-dom';
 

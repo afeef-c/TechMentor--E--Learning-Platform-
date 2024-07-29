@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import api from '../api';
+import api from '../../api';
 
 function EditCourse() {
   const [course, setCourse] = useState();
@@ -38,18 +38,15 @@ function EditCourse() {
     fetchCourseDetails();
   }, [courseId]);
 
-  const updateCourse = async (id, data) => {
-    return api.put(`courses/${id}/`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    });
-  };
-
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await updateCourse(courseId, formData);
+      const response = await api.put(`courses/${courseId}/`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+
       setCourse(response.data);
       alert('Course updated successfully');
     } catch (error) {

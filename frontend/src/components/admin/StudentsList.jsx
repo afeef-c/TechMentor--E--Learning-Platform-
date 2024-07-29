@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, {useContext, useEffect, useState} from 'react'
-import api from '../api';
-import {ACCESS_TOKEN} from '../constants';
+import api from '../../api';
+import {ACCESS_TOKEN} from '../../constants';
 import {useDispatch,useSelector} from 'react-redux'
 import {NavLink} from 'react-router-dom';
 
@@ -16,7 +16,7 @@ function StudentsList() {
     
     const fetchUsersList = async () => {
         if (authTokens) {
-            console.log("Students list: ", authTokens)
+
             try {
                 const response = await api.get('/users/users_list/', {
                 headers: {
@@ -30,12 +30,6 @@ function StudentsList() {
             }
         }
     };
-
-    //useEffect(() => {
-    //    if (authTokens) {
-    //    dispatch(fetchUserDetails());
-    //    }
-    //}, [authTokens, dispatch]);
 
     useEffect(() => {
 
@@ -61,19 +55,19 @@ function StudentsList() {
                     <table className="table table-striped">
                         <tbody>
                         <tr>
-                            <th>Student ID</th>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>email</th>
-                            <th>Action</th>
+                            <th className="text-center">Student ID</th>
+                            <th className="text-center">Name</th>
+                            <th className="text-center">Status</th>
+                            <th className="text-center">email</th>
+                            <th className="text-center">Action</th>
                         </tr>
                         {studentUsers.map(user=>(
                                 <tr>
-                                    <td><a href="#">{user.id}</a></td>
-                                    <td className="font-weight-600">{user.username}</td>
-                                    <td><div className="badge badge-warning">{user.is_active ? 'Active' : 'Inactive'}</div></td>
-                                    <td>{user.email}</td>
-                                    <td>
+                                    <td className="text-center"><a href="#">{user.id}</a></td>
+                                    <td className="font-weight-600 text-center">{user.username}</td>
+                                    <td className="text-center"><div className="badge badge-warning">{user.is_active ? 'Active' : 'Inactive'}</div></td>
+                                    <td className="text-center">{user.email}</td>
+                                    <td className="text-center">
                                     <NavLink  to={`/admin_dashboard/editUser/${user.id}`} className="btn btn-primary">Detail</NavLink>
                                     </td>
                                 </tr>

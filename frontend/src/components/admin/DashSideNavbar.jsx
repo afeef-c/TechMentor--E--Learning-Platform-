@@ -6,7 +6,7 @@ function DashSideNavbar() {
     <div className="main-sidebar sidebar-style-2">
       <aside id="sidebar-wrapper">
         <div className="sidebar-brand">
-          <NavLink to="/"><span className="text-primary">Tech</span>Mentor</NavLink>
+          <a href="/"><span className="text-primary">Tech</span>Mentor</a>
         </div>
         <div className="sidebar-brand sidebar-brand-sm">
           <NavLink to="/"><span className="text-primary">T</span>M</NavLink>

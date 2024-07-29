@@ -14,7 +14,7 @@ urlpatterns = [
 
     
     # Lesson URLs
-    path('lessons/', LessonListCreateView.as_view(), name='lesson-list-create'),
+    path('lessons/<int:course_id>/', LessonListCreateView.as_view(), name='lesson-list-create'),
     path('lessons/<int:pk>/', LessonRetrieveUpdateDestroyView.as_view(), name='lesson-detail'),
 
     # Assignment URLs

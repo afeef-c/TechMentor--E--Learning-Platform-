@@ -47,8 +47,6 @@ function MyCourses() {
         }
     }, [authTokens, dispatch]);
 
-    console.log("My courses: ", courses);
-    console.log("Categories: ", categories);
 
     return (
         <div>
@@ -77,7 +75,7 @@ function MyCourses() {
                                             <th>Category</th>
                                             <th>Course Fee</th>
                                         
-                                            <th>Due Date</th>
+                                            <th>Lessons</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -94,7 +92,11 @@ function MyCourses() {
                                                     {course.course_fee}
                                                 </td>
                                                 <td>
-                                                    <img alt="avatar" src={course.image} className="rounded-circle" width={35} data-toggle="tooltip" title="Wildan Ahdian" />
+                                                    <NavLink to={`/dashboard/lessons/${course.id}`} className="nav-item nav-link" >
+                                                        <i className="fas fa-edit"></i> Lessons
+                                                    </NavLink>
+                                                    
+                                                    {/*<img alt="avatar" src={course.image} className="rounded-circle" width={35} data-toggle="tooltip" title="Wildan Ahdian" />*/}
                                                 </td>
                                                 <td>
                                                     <div className={`badge ${course.is_active ? 'badge-success' : 'badge-danger'}`}>
