@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -17,6 +18,7 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True)
     groups = models.ManyToManyField(Group, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
+    is_active = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.is_superuser:
@@ -24,10 +26,14 @@ class CustomUser(AbstractUser):
         super().save(*args, **kwargs)
 
 
+
+
 class TutorProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     expertise = models.CharField(max_length=255)
     experience = models.TextField()
+    documents = models.FileField(upload_to='tutor_documets/', blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
 
     def clean(self):
         if self.user.user_type != 'tutor':
@@ -41,3 +47,10 @@ class TutorProfile(models.Model):
 def create_or_update_tutor_profile(sender, instance, created, **kwargs):
     if instance.user_type == 'tutor':
         TutorProfile.objects.get_or_create(user=instance)
+
+
+
+class OTP(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)

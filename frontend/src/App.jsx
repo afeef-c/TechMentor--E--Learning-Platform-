@@ -20,8 +20,6 @@ import AdminRoute from './components/AdminRoute';
 import EditUser from './components/admin/EditUser';
 import CreateCourse from './components/CreateCourse';
 import CoursesList from './components/CoursesList';
-import TutorDashboard from './pages/dashboards/TutorDashboard';
-import StudentDashboard from './pages/dashboards/StudentDashboard';
 import UserIntro from './pages/dashboards/UserIntro';
 import EditProfile from './components/tutor/EditProfile';
 import DashBoardRoute from './components/DashBoardRoute';
@@ -37,6 +35,8 @@ import StudentsList from './components/admin/StudentsList';
 import TutorsList from './components/admin/TutorsList';
 import EditCourse from './components/admin/EditCourse';
 import CourseDetails from './components/CourseDetails';
+import { ToastContainer } from 'react-toastify';
+import UsersDashboard from './pages/dashboards/UsersDashboard';
 
 function App() {
   const isAdminDashboard = window.location.pathname.includes('admin_dashboard');
@@ -58,7 +58,7 @@ function App() {
             <Route path='edit_course/:courseId' element={<EditCourse />} />
           
           </Route>
-          <Route path='/dashboard/*' element={<DashBoardRoute><TutorDashboard /></DashBoardRoute>}>
+          <Route path='/dashboard/*' element={<DashBoardRoute><UsersDashboard /></DashBoardRoute>}>
             <Route path='bio' element={<UserIntro />} />
             <Route path='edit_profile' element={<EditProfile />} />
             <Route path='add_experience' element={<AddExperience />} />
@@ -84,7 +84,9 @@ function App() {
         </Routes>
         {!isAdminDashboard && !isDashboard && <Footer />}
       </AuthProvider>
+    <ToastContainer />
     </Router>
+
   );
 }
 

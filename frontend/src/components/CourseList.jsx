@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 import {NavLink} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchCategories, fetchCourses} from '../coursesSlice';
 
 function CourseList() {
-    const [courses, setCourses] = useState([]);
+    
+    const dispatch = useDispatch()
+    const courses = useSelector((state) => state.courses.courses);
+    const categories= useSelector((state)=> state.courses.categories);
+    const status = useSelector((state) => state.courses.status);
+    const error = useSelector((state) => state.courses.error);
+
 
     useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                const coursesResponse = await api.get('courses/courses_list/');
-                setCourses(coursesResponse.data);
-            } catch (error) {
-                console.log(error.response ? error.response.data : 'Error fetching courses');
-            } finally {
-                console.log("Fetch courses operation completed");
-            }
-        };
-        fetchCourses();
-    }, []);
+        if (status === 'idle'){
+            dispatch(fetchCourses())
+            dispatch(fetchCategories())
+        }
+        
+    }, [status, dispatch]);
+
+    if (status === 'loading') return <div>Loading...</div>;
+    if (status === 'failed') return <div>Error: {error}</div>;
 
     const imageStyle = {
         width: '100%',
@@ -42,9 +47,10 @@ function CourseList() {
                                 <div className="bg-secondary p-4">
                                     <div className="d-flex justify-content-between mb-3">
                                         <small className="m-0"><i className="fa fa-users text-primary mr-2" />{course.student_count} Students</small>
-                                        <small className="m-0"><i className="far fa-clock text-primary mr-2" />{course.duration}</small>
+                                        {course.is_active? <small className="m-0 p-2 badge badge-success">Active</small>:<small className="m-0 p-2 badge badge-warning"><i className="far fa-clock text-primary mr-2" />Coming Soon</small>}
+                                        <small className="m-0"><i className="far fa-category text-primary mr-2" /> {categories[course.category-1] && categories[course.category-1].name}</small>
                                     </div>
-                                    <a className="h5" href={`/course/${course.id}`}>{course.title}</a>
+                                    <p className="h5" href={`/course/${course.id}`}>{course.title}</p>
                                     <div className="border-top mt-4 pt-4">
                                         <div className="d-flex justify-content-between">
                                             <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{course.rating} <small>({course.reviews_count})</small></h6>

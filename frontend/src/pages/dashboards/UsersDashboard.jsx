@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import NavDashboard from '../../components/tutor/NavDashboard';
 
 
-function TutorDashboard() {
+function UsersDashboard() {
   return (
     
     <div>
@@ -18,4 +18,4 @@ function TutorDashboard() {
   )
 }
 
-export default TutorDashboard
+export default UsersDashboard

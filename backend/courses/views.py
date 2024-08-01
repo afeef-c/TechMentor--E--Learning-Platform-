@@ -58,6 +58,7 @@ class TutorCoursesList(generics.ListAPIView):
             return Course.objects.filter(tutor=user).select_related('category')
             #return Course.objects.filter(tutor=user)
         return Course.objects.none()
+    
 class CourseActivateView(generics.UpdateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer

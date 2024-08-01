@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import api from '../api';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {fetchCategories, fetchCourses} from '../coursesSlice';
 
 function CourseCategories() {
-    const [categories, setCategories] = useState([]);
+    const dispatch = useDispatch();
+    const courses = useSelector((state) => state.courses.courses);
+    const categories = useSelector((state) => state.courses.categories);
+    const status = useSelector((state) => state.courses.status);
+    const error = useSelector((state) => state.courses.error);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const categoriesResponse = await api.get('courses/categories_list/');
-                setCategories(categoriesResponse.data);
-                console.log("categories: ", categoriesResponse.data);
-            } catch (error) {
-                console.log(error.response ? error.response.data : 'Error fetching categories');
-            } finally {
-                console.log("Fetch categories operation completed");
-            }
-        };
-        fetchCategories();
-    }, []);
+        if (status === 'idle') {
+            dispatch(fetchCourses());
+            dispatch(fetchCategories());
+        }
+    }, [status, dispatch]);
+
+    if (status === 'loading') return <div>Loading...</div>;
+    if (status === 'failed') return <div>Error: {error}</div>;
+
 
     const imageStyle = {
         width: '100%',

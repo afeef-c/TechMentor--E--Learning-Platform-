@@ -1,29 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser,TutorProfile
+from .models import CustomUser, TutorProfile
 from django.core.exceptions import ValidationError
 from django import forms
-
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'is_active', 'user_type')
     list_filter = ('is_staff', 'is_active', 'user_type')
-    fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('username', 'first_name', 'last_name', 'bio', 'profile_pic', 'phone','user_type')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
-    )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2', 'is_staff', 'is_active')}
-        ),
-    )
+    
     search_fields = ('email', 'username')
-    ordering = ('email',)
-
+    
 admin.site.register(CustomUser, CustomUserAdmin)
 
 class TutorProfileForm(forms.ModelForm):
@@ -39,5 +26,14 @@ class TutorProfileForm(forms.ModelForm):
 
 class TutorProfileAdmin(admin.ModelAdmin):
     form = TutorProfileForm
-    list_display = ('user', 'expertise', 'experience')
+    list_display = ('user', 'expertise', 'experience', 'is_verified')
     search_fields = ('user__username', 'expertise')
+    readonly_fields = ('is_verified',)  # make is_verified read-only for all users
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = super(TutorProfileAdmin, self).get_readonly_fields(request, obj)
+        if not request.user.is_superuser:
+            readonly_fields = ('is_verified',)
+        return readonly_fields
+
+admin.site.register(TutorProfile, TutorProfileAdmin)

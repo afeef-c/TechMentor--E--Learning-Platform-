@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { fetchUserDetails, loginUser } from '../authSlice'; // Adjust the import path as needed
-import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function Login() {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchUserDetails())
+    dispatch(fetchUserDetails());
 
     if (user) {
       if (user.user_type === "admin" || user.user_type === "tutor") {
@@ -22,20 +23,28 @@ function Login() {
         navigate("/");
       }
     }
-  }, [user, navigate]);
+  }, [navigate, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await dispatch(loginUser({ username, password })).unwrap();
-      
-    } catch (error) {
-      alert('Login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+        await dispatch(loginUser({ username, password })).unwrap();
+        toast.success("Login successful!");
+        // Redirect after successful login
+        if (user) {
+          if (user.user_type === "admin" || user.user_type === "tutor") {
+            navigate("/dashboard");
+          } else {
+            navigate("/");
+          }
+        }
+      } catch (error) {
+        toast.error('Login failed');
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="container-fluid py-5">
@@ -76,7 +85,7 @@ function Login() {
                 {loading && <p>Loading...</p>}  
               </div>
               <div className='text-center p-4'>
-                <p>Don't have an account ? <Link to='/register' className="text-primary text-uppercase mb-3" style={{letterSpacing: 5}}> Signup</Link></p>
+                <p>Don't have an account? <Link to='/register' className="text-primary text-uppercase mb-3" style={{letterSpacing: 5}}>Signup</Link></p>
               </div>
             </form>
           </div>
