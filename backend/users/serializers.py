@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, TutorProfile
+from .models import Cart, CartItem, CourseProgress, CustomUser, StudentActivityLog, StudentProfile, TutorProfile, Wishlist
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -39,3 +39,45 @@ class TutorProfileSerializer(serializers.ModelSerializer):
         if 'is_verified' in validated_data and self.context['request'].user.user_type != 'admin':
             raise serializers.ValidationError("Only admins can update the 'is_verified' field.")
         return super().update(instance, validated_data)
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = StudentProfile
+        fields = '__all__'
+
+class StudentActivityLogSerializer(serializers.ModelSerializer):
+    
+    user = StudentProfileSerializer(read_only=True)
+    class Meta:
+        model = StudentActivityLog
+        fields = '__all__'
+
+class CourseProgressSerializer(serializers.ModelSerializer):
+    user = StudentProfileSerializer(read_only=True)
+    
+    class Meta:
+        model = CourseProgress
+        fields = '__all__'
+
+class WishlistSerializer(serializers.ModelSerializer):
+    
+    user = StudentProfileSerializer(read_only=True)
+    
+    class Meta:
+        model = Wishlist
+        fields = '__all__'
+
+class CartSerializer(serializers.ModelSerializer):
+    
+    user = StudentProfileSerializer(read_only=True)
+    
+    class Meta:
+        model = Cart
+        fields = '__all__'
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = '__all__'

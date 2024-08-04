@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, TutorProfile
+from .models import Cart, CartItem, CourseProgress, CustomUser, StudentActivityLog, StudentProfile, TutorProfile, Wishlist
 from django.core.exceptions import ValidationError
 from django import forms
 
@@ -37,3 +37,11 @@ class TutorProfileAdmin(admin.ModelAdmin):
         return readonly_fields
 
 admin.site.register(TutorProfile, TutorProfileAdmin)
+
+
+admin.site.register(StudentProfile)
+admin.site.register(StudentActivityLog)
+admin.site.register(CourseProgress)
+admin.site.register(Wishlist)
+admin.site.register(Cart)
+admin.site.register(CartItem)

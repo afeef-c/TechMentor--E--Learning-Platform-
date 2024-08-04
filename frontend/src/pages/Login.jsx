@@ -15,36 +15,32 @@ function Login() {
 
   useEffect(() => {
     dispatch(fetchUserDetails());
+  }, [dispatch]);
 
+  useEffect(() => {
     if (user) {
-      if (user.user_type === "admin" || user.user_type === "tutor") {
-        navigate("/dashboard");
+      if (user.user_type === "admin") {
+        window.location.href = "/admin_dashboard";
+      } else if (user.user_type === "tutor") {
+        window.location.href = "/admin_dashboard";
       } else {
-        navigate("/");
+        window.location.href = '/';
       }
     }
-  }, [navigate, dispatch]);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-        await dispatch(loginUser({ username, password })).unwrap();
-        toast.success("Login successful!");
-        // Redirect after successful login
-        if (user) {
-          if (user.user_type === "admin" || user.user_type === "tutor") {
-            navigate("/dashboard");
-          } else {
-            navigate("/");
-          }
-        }
-      } catch (error) {
-        toast.error('Login failed');
-      } finally {
-        setLoading(false);
-      }
-    };
+      await dispatch(loginUser({ username, password })).unwrap();
+      toast.success("Login successful!");
+    } catch (error) {
+      toast.error('Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container-fluid py-5">

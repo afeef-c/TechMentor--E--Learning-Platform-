@@ -75,11 +75,11 @@ const Navbar = () => {
                                         <a href={getDashboardLink()} className="dropdown-item has-icon">
                                             <i className="far fa-user" /> Profile
                                         </a>
-                                        <a href="features-activities.html" className="dropdown-item has-icon">
-                                            <i className="fas fa-bolt" /> Activities
+                                        <a href="/cart" className="dropdown-item has-icon">
+                                            <i className="fas fa-shopping-cart" />Cart
                                         </a>
-                                        <a href="features-settings.html" className="dropdown-item has-icon">
-                                            <i className="fas fa-cog" /> Settings
+                                        <a href="/wishlist" className="dropdown-item has-icon">
+                                            <i className="fas fa-heart" /> Wishlist
                                         </a>
                                         <div className="dropdown-divider" />
                                         <button onClick={handleLogout} className="dropdown-item text-danger">

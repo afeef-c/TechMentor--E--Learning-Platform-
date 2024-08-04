@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from courses.models import Course
+
 class CustomUser(AbstractUser):
     USER_TYPES = (
         ('student', 'Student'),
@@ -47,7 +49,49 @@ class TutorProfile(models.Model):
 def create_or_update_tutor_profile(sender, instance, created, **kwargs):
     if instance.user_type == 'tutor':
         TutorProfile.objects.get_or_create(user=instance)
+    elif instance.user_type == 'student':
+        StudentProfile.objects.get_or_create(user=instance)
+        Cart.objects.get_or_create(user= instance)
 
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    
+class StudentActivityLog(models.Model):
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
+    login_time = models.DateTimeField()
+    logout_time = models.DateTimeField()
+
+
+class CourseProgress(models.Model):
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    lessons_completed = models.IntegerField()
+    total_lessons = models.IntegerField()
+    progress_percentage = models.FloatField()
+    updated_at = models.DateField(auto_now=True)
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('user', 'course')
+
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    price_at_addition = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        unique_together = ('cart', 'course')
 
 
 class OTP(models.Model):

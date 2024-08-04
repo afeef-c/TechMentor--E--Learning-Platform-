@@ -37,6 +37,8 @@ import EditCourse from './components/admin/EditCourse';
 import CourseDetails from './components/CourseDetails';
 import { ToastContainer } from 'react-toastify';
 import UsersDashboard from './pages/dashboards/UsersDashboard';
+import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist';
 
 function App() {
   const isAdminDashboard = window.location.pathname.includes('admin_dashboard');
@@ -74,6 +76,10 @@ function App() {
           
           <Route path='/about' element={<AboutPage />} />
           <Route path='/courses' element={<Courses />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/wishlist' element={<Wishlist />} />
+          
+          
           <Route path='/course_details/:course_id' element={<CourseDetails />} />
           <Route path='/tutors' element={<TutorsPage />} />
           <Route path='/contact' element={<ContactPage />} />

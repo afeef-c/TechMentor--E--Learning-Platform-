@@ -2,8 +2,8 @@ from django.forms import ValidationError
 from django.shortcuts import render
 from rest_framework import generics, permissions,status
 from .permissions import IsAdminOrTutor
-from .models import OTP, CustomUser, TutorProfile
-from .serializers import CustomUserSerializer, RegisterSerializer, TutorProfileSerializer
+from .models import OTP, Cart, CartItem, CourseProgress, CustomUser, StudentActivityLog, StudentProfile, TutorProfile, Wishlist
+from .serializers import CartItemSerializer, CartSerializer, CourseProgressSerializer, CustomUserSerializer, RegisterSerializer, StudentActivityLogSerializer, StudentProfileSerializer, TutorProfileSerializer, WishlistSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.response import Response
@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import random
 from rest_framework import serializers
+from rest_framework.decorators import api_view
 
 
 
@@ -282,7 +283,81 @@ class TutorVerificationView(generics.UpdateAPIView):
         return Response(serializer.data)
 
 
+class StudentProfileViewSet(viewsets.ModelViewSet):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
 
+class StudentActivityLogViewSet(viewsets.ModelViewSet):
+    queryset = StudentActivityLog.objects.all()
+    serializer_class = StudentActivityLogSerializer
+
+class CourseProgressViewSet(viewsets.ModelViewSet):
+    queryset = CourseProgress.objects.all()
+    serializer_class = CourseProgressSerializer
+
+class WishlistViewSet(viewsets.ModelViewSet):
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistSerializer
+
+#====================CART==============================================
+
+#class CartListCreateView(generics.ListCreateAPIView):
+#    queryset = Cart.objects.all()
+#    serializer_class = CartSerializer
+
+#    def perform_create(self, serializer):
+#        serializer.save(user=self.request.user)
+
+
+class CartDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+@api_view(['GET'])
+def get_or_create_cart(request):
+    user = request.user
+    try:
+        cart = Cart.objects.get(user=user)
+    except Cart.DoesNotExist:
+        cart = Cart.objects.create(user=user)
+
+    serializer = CartSerializer(cart)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def add_item_to_cart(request):
+    user = request.user
+    course_id = request.data.get('course')
+    price_at_addition = request.data.get('price_at_addition')
+
+    try:
+        cart = Cart.objects.get(user=user)
+    except Cart.DoesNotExist:
+        return Response({"detail": "Cart does not exist for this user."}, status=status.HTTP_404_NOT_FOUND)
+
+    if CartItem.objects.filter(cart=cart, course_id=course_id).exists():
+        return Response({"detail": "Item already in cart."}, status=status.HTTP_400_BAD_REQUEST)
+
+    cart_item = CartItem.objects.create(
+        cart=cart,
+        course_id=course_id,
+        price_at_addition=price_at_addition
+    )
+
+    serializer = CartItemSerializer(cart_item)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def get_cart_items(request):
+    user = request.user
+    try:
+        cart = Cart.objects.get(user=user)
+    except Cart.DoesNotExist:
+        return Response({"detail": "Cart does not exist for this user."}, status=status.HTTP_404_NOT_FOUND)
+
+    items = CartItem.objects.filter(cart=cart)
+    serializer = CartItemSerializer(items, many=True)
+    return Response(serializer.data)
 
 class CurrentUserView(generics.RetrieveUpdateAPIView):
     serializer_class = CustomUserSerializer
