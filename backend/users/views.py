@@ -35,7 +35,6 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             # Log detailed errors
-            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         # Don't save the user yet
@@ -358,6 +357,22 @@ def get_cart_items(request):
     items = CartItem.objects.filter(cart=cart)
     serializer = CartItemSerializer(items, many=True)
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def remove_item_from_cart(request, item_id):
+    user = request.user
+    try:
+        cart = Cart.objects.get(user=user)
+    except Cart.DoesNotExist:
+        return Response({"detail": "Cart does not exist for this user."}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        cart_item = CartItem.objects.get(cart=cart, id=item_id)
+    except CartItem.DoesNotExist:
+        return Response({"detail": "Item not found in cart."}, status=status.HTTP_404_NOT_FOUND)
+
+    cart_item.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CurrentUserView(generics.RetrieveUpdateAPIView):
     serializer_class = CustomUserSerializer

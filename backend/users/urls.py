@@ -1,5 +1,5 @@
 from django.urls import include, path
-from .views import CartDetailView, CourseProgressViewSet, RegisterView, StudentActivityLogViewSet, StudentProfileViewSet, TutorProfileUpdateView, UserDetailView,CurrentUserView, UserListView, VerifyOTPView, WishlistViewSet, add_item_to_cart, get_cart_items, get_or_create_cart
+from .views import CartDetailView, CourseProgressViewSet, RegisterView, StudentActivityLogViewSet, StudentProfileViewSet, TutorProfileUpdateView, UserDetailView,CurrentUserView, UserListView, VerifyOTPView, WishlistViewSet, add_item_to_cart, get_cart_items, get_or_create_cart, remove_item_from_cart
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.routers import DefaultRouter
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path('carts/<int:pk>/', CartDetailView.as_view(), name='cart-detail'),
     path('carts/user/', get_or_create_cart, name='get-or-create-cart'),
     path('cart_items/add/', add_item_to_cart, name='add-item-to-cart'),
+    path('cart_items/remove/<int:item_id>/', remove_item_from_cart, name='remove-item-from-cart'),
     path('cart_items/', get_cart_items, name='get-cart-items'),
 
     path('', include(router.urls))

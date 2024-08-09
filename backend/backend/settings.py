@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     'users',
     'courses',
+    'orders',
 
 ]
 
@@ -157,3 +158,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'afeefc8281@gmail.com'
 EMAIL_HOST_PASSWORD = 'hqxu zgfe gdnj funf' 
+
+
+RAZORPAY_API_KEY = 'rzp_test_8OauQRfnByyZSJ'
+RAZORPAY_API_SECRET = 'tiLio1qzMHKiar32mM0LN5pK'
+
+#PAYPAL_CLIENT_ID = 'AQ4gikVm3_pEuqBVkkiEBb0fx5bGXV9vSedlFvlE6BBiYvqWo2gsfvXJbWhT0ELDHUMO01E3Ow6oUo46'
+#PAYPAL_CLIENT_SECRET = 'EAl0OQBRmcB92e9LDFfgqm3phfuI-hQSe0x7NbpISg2fGDS4e9lFJc_iDRGQeje9ooqDEP7U6lSuIg2c'
+#PAYPAL_MODE = 'sandbox'  # or 'live'
